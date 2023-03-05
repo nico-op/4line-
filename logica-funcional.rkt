@@ -1,5 +1,7 @@
 #lang racket/gui
 
+
+;hola 
 (define (suma-valores valores)
   (cond ((null? valores) 0)
         (else (+ (car valores) (suma-valores (cdr valores))))))
