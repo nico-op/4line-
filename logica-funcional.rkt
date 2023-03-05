@@ -18,24 +18,35 @@
 
 
 
-(define (matrix-columns matrix)
+;; recorreColumnas: recorre cada columna como una lista
+;; entrada: matriz -> recibe la matriz para recorrer a manera de columnas
+;; salida: pasa cada una de las columnas que hay, para hacer la comparación en esviablecolumns 
+(define (recorreColumnas matriz)
   (reverse
-   (my-foldl (lambda (row cols)
-               (cons (cons (car row) (car cols)) (cdr cols)))
+   (listaColumnas (lambda (fila cols)
+               (cons (cons (car fila) (car cols)) (cdr cols)))
              (list (list))
-             matrix)))
+             matriz)))
 
-(define (is-viable-columns matrix)
+;; esviablecolumns: verifica si en la matriz hay una 
+;; entrada: matriz -> recibe una matriz que contiene valores
+;; salida: booleano -> indica si hay un espacio en la matriz que sea viable
+(define (esviablecolumns matriz)
   (reverse
-   (my-foldl (lambda (col viable)
+   (listaColumnas (lambda (col viable)
                (cons (viabilidad col) viable))
              (list)
-             (matrix-columns matrix))))
+             (recorreColumnas matriz))))
+;;(esviablecolumns '((9 0 -9)(3 -1 -5)(2 -7 -5)(1 -2 -5)))
+
+;; listaColumnas: mete la columna en una lista
+;; entrada: colList,inicial,lista ->
+;; salida: colLst ->
+(define (listaColumnas colLst inicial lista)
+  (cond ((null? lista)inicial)
+        (else(listaColumnas colLst (colLst (car lista) inicial) (cdr lista)))))
 
 
 
-(define (my-foldl f init lst)
-  (cond ((null? lst)init)
-        (else(my-foldl f (f (car lst) init) (cdr lst)))))
 
-
+;;Plan para mañana 4/3/23, si un espacio es viable entonces colocar la ficha.
