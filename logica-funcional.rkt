@@ -15,3 +15,27 @@
 
 ;; como usar:
 ;; (viabilidad '(-1 0 1 3 4 5))
+
+
+
+(define (matrix-columns matrix)
+  (reverse
+   (my-foldl (lambda (row cols)
+               (cons (cons (car row) (car cols)) (cdr cols)))
+             (list (list))
+             matrix)))
+
+(define (is-viable-columns matrix)
+  (reverse
+   (my-foldl (lambda (col viable)
+               (cons (viabilidad col) viable))
+             (list)
+             (matrix-columns matrix))))
+
+
+
+(define (my-foldl f init lst)
+  (cond ((null? lst)init)
+        (else(my-foldl f (f (car lst) init) (cdr lst)))))
+
+
