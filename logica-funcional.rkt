@@ -5,9 +5,11 @@
         (else (+ (car values) (sum-values (cdr values))))))
 
 
-;; viabilidad: determina la viabilidad
+;; viabilidad: determina la viabilidad.
+;; entrada: candidate -> recibe una lista de conjuntos candidatos.
+;; salida: booleano -> en #t en caso de ser mayor a cero, #f en caso de ser menor a cero.
 (define (viabilidad candidate)
   (cond ((> (sum-values candidate) 0) #t)
         (else #f)))
-;;como usar:
-;;(viabilidad '(-1 0 1 3 4 5))
+;; como usar:
+;; (viabilidad '(-1 0 1 3 4 5))
