@@ -38,6 +38,7 @@
                 (send dc set-text-foreground "black")
                 (send dc draw-text "Defina el tamaño del tablero" 110 10))]))
 
+
 ;Se crea un panel horizontal para colocar los text fields
 (define panel1( new horizontal-panel%[parent frame_p] [alignment '(center center)]))
 
@@ -49,6 +50,7 @@
 
 ;Se crea un panel horizontal para el boton
 (define panel2( new horizontal-panel%[parent frame_p] [alignment '(center center)]))
+
 
 ;Se crea un panel horizontal para colocar el mensaje de error en caso de ingresar un valor de fila o columna mayor a 16
 (define panel3( new horizontal-panel%[parent frame_p] [alignment '(center center)]))
