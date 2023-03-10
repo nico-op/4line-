@@ -97,9 +97,9 @@
  
 ; Coloca las fichas en el tablero
 (define (SetToken color posX posY dc)
-  (send dc set-brush color 'solid)
+  (send dc set-brush color 'solid) ;se rellena el circulo
   (send dc set-pen color 4 'solid)
-  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50))
+  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50)) ;se dibuja el circulo
 
 ; Con esta funcion se puede conocer la posicion del mouse, obteniendo las coordenadas en "y" y "x" de la ventana
 (define (mouse-pos event)
@@ -124,11 +124,11 @@
            
            (for ([j (in-range 0 (string->number columna))])
              (send dc draw-line (* j 80) 0 (* j 80) alto))
-          
-           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc)))    ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
            
            (for ([i (in-range 0 (string->number fila))])
-             (send dc draw-line 0 (* i 80) ancho (* i 80))))
+           (send dc draw-line 0 (* i 80) ancho (* i 80)))
+
+           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
          
 
 ;En este canvas se va a ir refrescando la pantalla de juego con los nuevos cambios o eventos, y se hace un enlace de las coordenadas "x" y "y" reales del mouse
