@@ -1,6 +1,27 @@
 #lang racket
 
 
+;; crea-matriz: permite crear una matriz n x m
+;; entrada: n,m -> n tamaño de la fila, m tamaño de la columna 
+;;
+
+(define (crear-matriz-aux n m matriz)
+  (cond ((equal? 0 m) matriz)
+        (else (crear-matriz-aux n (- m 1) (append (list (agregafila'() n) matriz))))))
+
+(define (agregafila fila n)
+  (cond ((equal? n 0) fila)
+        (else (agregafila (cons '0 fila) (- n 1)))))
+
+;; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
+
+;; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha
+
+;; objetivo calcula el valor de cada componente
+
+;; solución el valor del puntaje total 
+
+
 (define (get-element lst idx)
   (cond ((null? lst) (error "La lista está vacía"))
     ; Si el índice es 0, devolver el primer elemento de la lista
@@ -38,3 +59,6 @@
   (cond ((null? mat)0)
         (else (length (car mat)))))
 
+
+
+;;(define matriz-prueba '((1 2 3) (4 5 6) (7 8 9)))
