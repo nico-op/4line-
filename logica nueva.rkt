@@ -16,11 +16,32 @@
   (cond ((equal? n 0) fila)
         (else (agregafila (cons '0 fila) (- n 1)))))
 
+;; (crear-matriz 2 3)
+
 ;; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
 
 ;; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha
 
 ;; objetivo calcula el valor de cada componente
+;*********************************************************************************************************************************
+
+; viabilidad: indicar en cuales columnas hay una opción disponible para agregar la ficha
+; 
+;
+
+(define (viabilidad mat)
+  (viabilidad-aux mat 1))
+
+(define (viabilidad-aux mat i)
+  (cond ((null? mat)'())
+        (else (append (busca-en-fila (car mat) i 1 '())
+                      (viabilidad-aux (cdr mat) (+ i 1))))))
+
+(define (busca-en-fila fila i j acum)
+  (cond ((null? fila) acum)
+        ((zero? (car fila)) (busca-en-fila (cdr fila) i (+ j 1) (append acum (list (list i j)))))
+        (else (busca-en-fila (cdr fila) i (+ j 1) acum))))
+
 
 ;*********************************************************************************************************************************
 ;; solución el valor del puntaje total 
@@ -44,9 +65,9 @@
 ;entrada: una lista y un índice 
 ;salida: retorna el elemento que se encuentra en el índice indicado 
 (define (obtener-ele lista idx)
-  (cond ((null? lista) (error "La lista está vacía"))
+  (cond ((null? lista) '())
     ; Si el índice es 0, devolver el primer elemento de la lista
-    ((= idx 0) (car lista))
+    ((= idx 1) (car lista))
     ; Si el índice es mayor que 0, llamar recursivamente a la función con el resto de la lista y el índice reducido en 1
     (else (obtener-ele (cdr lista) (- idx 1)))))
 
@@ -55,7 +76,7 @@
 ;entrada: una matriz y las posiciones (i, j)
 ;salida: el elemento correspondiente en la posición (i, j) de la matriz.
 (define (obtenernum mat i j)
-  (cond ((null? mat) (error "La matriz está vacía"))
+  (cond ((null? mat) '())
         ((= i 0) (obtener-ele (car mat) j))
         (else (obtenernum (cdr mat) (- i 1) j))))
 
@@ -63,7 +84,7 @@
 ;;vacio: verifica si en la matriz hay algun elemento vacio en la matriz
 ;;entrada: mat,i,j -> una matriz n x m, indice de fila, indice de columna
 ;;salida: retorna #t en caso de encontrar vacio, sino #f en situación contraria
-(define (vacio mat i j)
+(define (vacio? mat i j)
   (equal? (obtenernum mat i j) '()))
 
 ;*********************************************************************************************************************************
