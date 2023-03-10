@@ -1,14 +1,13 @@
 #lang racket/gui    ;Se utilizará la interfaz grafica de Racket
 ;(require lang/posn) ;se utiliza para importar el módulo posn que proporciona funciones para trabajar con coordenadas de posición en dos dimensiones.
 (require 2htdp/image) ;libreria que permite cargar imagenes
+;(require "logica nueva.rkt") ;aqui se llama el documento .rkt que contiene la logica del juego
 
-;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
-;(open-graphics) ;aqui se llama a la libreria
-;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
-;(define oculta (open-pixmap "Ventana Principal" 700 600))  ; crea una ventana oculta
-;;(define imagen-fondo (bitmap/file "C:/Users/cecil/OneDrive/Documentos/4line-/2.png"))
-;(define panel (new horizontal-panel% [parent frame]))
-;(define canvas (new canvas% [parent panel]))
+;Instituto Tecnologico de Costa Rica
+;Lenguajes, Compiladores e Interpretes
+;Juego 4Line en lenguaje funcional Racket
+;Estudiantes: Meibel Ceciliano, Kevin Lobo, Nicol Otárola
+
 
 ;---------------------------------------------------------------
                     ;VENTANA PRINCIPAL
@@ -150,14 +149,17 @@
          (send frame_juego show #t))
 
 
-        
-
-
-
+       
 ))
 
 
-
+;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
+;(open-graphics) ;aqui se llama a la libreria
+;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
+;(define oculta (open-pixmap "Ventana Principal" 700 600))  ; crea una ventana oculta
+;;(define imagen-fondo (bitmap/file "C:/Users/cecil/OneDrive/Documentos/4line-/2.png"))
+;(define panel (new horizontal-panel% [parent frame]))
+;(define canvas (new canvas% [parent panel]))
 
 
 
