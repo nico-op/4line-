@@ -5,9 +5,12 @@
 ;; entrada: n,m -> n tamaño de la fila, m tamaño de la columna 
 ;;
 
+(define (crear-matriz n m)
+  (crear-matriz-aux m n '()))
+
 (define (crear-matriz-aux n m mat)
   (cond ((equal? 0 m) mat)
-        (else (crear-matriz-aux n (- m 1) (append (list (agregafila'() n) mat))))))
+        (else (crear-matriz-aux n (- m 1) (append (list (agregafila'() n)) mat)))))
 
 (define (agregafila fila n)
   (cond ((equal? n 0) fila)
