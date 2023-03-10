@@ -129,9 +129,11 @@
            
            (for ([i (in-range 0 (string->number fila))])
              (send dc draw-line 0 (* i 80) ancho (* i 80))))
+         
 
-; Define a new class of canvas to control what is going to be drawn in the screen. Contains some code to declare the x and y coordinates and set them
-         ; to the actual position of the mouse when the left button is clicked.
+;En este canvas se va a ir refrescando la pantalla de juego con los nuevos cambios o eventos, y se hace un enlace de las coordenadas "x" y "y" reales del mouse
+;cuando el usuario vaya haciendo click en el canva
+
          (define my-canvas% (class canvas%
                               (super-new)
                               (define/override (on-event event)
@@ -141,7 +143,7 @@
                                      (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
-         ; Instantiate a new canvas to draw all stuff on the window
+         ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
          (define Canva (new my-canvas% [parent frame_juego] [paint-callback draw-canvas] [min-width ancho] [min-height alto]))
 
          ;Funcion que hace el evento de abrir la ventana de juego
