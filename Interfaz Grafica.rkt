@@ -179,13 +179,6 @@
 ))
 
 
-;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
-;(open-graphics) ;aqui se llama a la libreria
-;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
-;(define oculta (open-pixmap "Ventana Principal" 700 600))  ; crea una ventana oculta
-;;(define imagen-fondo (bitmap/file "C:/Users/cecil/OneDrive/Documentos/4line-/2.png"))
-;(define panel (new horizontal-panel% [parent frame]))
-;(define canvas (new canvas% [parent panel]))
 
 
 
