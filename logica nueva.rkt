@@ -1,9 +1,9 @@
 #lang racket
 
-
-;; crea-matriz: permite crear una matriz n x m
-;; entrada: n,m -> n tamaño de la fila, m tamaño de la columna 
-;;
+; holaaa
+; crea-matriz: permite crear una matriz n x m
+; entrada: n,m -> n tamaño de la fila, m tamaño de la columna 
+; salida: matriz del tamaño seleccionado 
 
 (define (crear-matriz n m)
   (crear-matriz-aux m n '()))
@@ -16,18 +16,18 @@
   (cond ((equal? n 0) fila)
         (else (agregafila (cons '0 fila) (- n 1)))))
 
-;; (crear-matriz 2 3)
+; (crear-matriz 2 3)
 
-;; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
+; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
 
-;; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha
+; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha
 
-;; objetivo calcula el valor de cada componente
+; objetivo calcula el valor de cada componente
 ;*********************************************************************************************************************************
 
 ; viabilidad: indicar en cuales columnas hay una opción disponible para agregar la ficha
-; 
-;
+; entrada: una matriz 
+; salida: retorna la fila y columna que se encuentra vacía 
 
 (define (viabilidad mat)
   (viabilidad-aux mat 1))
@@ -54,7 +54,7 @@
                                  (car columnas) matriz))
                (objetivo (cdr columnas) matriz)))))
 
-
+; Pair?: 
 (define (Pair? x)
   (cond ((null? x) #f)
         ((not (list? x)) #f)
@@ -141,18 +141,18 @@
 
 
 ;*********************************************************************************************************************************
-;; solución el valor del puntaje total 
-;; cantidad-filas:
-;; entrada: mat -> una matriz de n x m
-;; salida: 
+; solución el valor del puntaje total 
+; cantidad-filas:
+; entrada: mat -> una matriz de n x m
+; salida: 
 (define (cantidad-filas mat)
   (cond ((null? mat)0)
         (else (+ 1 (cantidad-filas (cdr mat))))))
 
 ;*********************************************************************************************************************************
-;; cantidad-columnas:
-;; entrada: mat -> una matriz de n x m
-;; salida:
+; cantidad-columnas:
+; entrada: mat -> una matriz de n x m
+; salida:
 (define (cantidad-columnas mat)
   (cond ((null? mat)0)
         (else (length (car mat)))))
@@ -178,29 +178,27 @@
         (else (obtenernum (cdr mat) (- i 1) j))))
 
 ;*********************************************************************************************************************************
-;;vacio: verifica si en la matriz hay algun elemento vacio en la matriz
-;;entrada: mat,i,j -> una matriz n x m, indice de fila, indice de columna
-;;salida: retorna #t en caso de encontrar vacio, sino #f en situación contraria
+; vacio: verifica si en la matriz hay algun elemento vacio en la matriz
+; entrada: mat,i,j -> una matriz n x m, indice de fila, indice de columna
+; salida: retorna #t en caso de encontrar vacio, sino #f en situación contraria
 (define (vacio? mat i j)
   (equal? (obtenernum mat i j) '()))
 
 ;*********************************************************************************************************************************
-;largo: función recursiva para obtener el largo de una lista
-;entrada: una lista
-;salida: retorna el largo que posee la lista 
+; largo: función recursiva para obtener el largo de una lista
+; entrada: una lista
+; salida: retorna el largo que posee la lista 
 (define (largo lista)
   (cond ((null? lista) 0) ; si la lista es vacía, devuelve 0
         (else (+ 1 (largo (cdr lista)))))) ; en otro caso, suma 1 y llama recursivamente a la función con la cola de la lista
 
 ;*********************************************************************************************************************************
-;invertir: función que invierte el orden de una lista
-;entrada: una lista 
-;salida: una lista con sus datos invertidos 
+; invertir: función que invierte el orden de una lista
+; entrada: una lista 
+; salida: una lista con sus datos invertidos 
 (define (invertir lista)
   (cond ((null? lista) '())
         ((null? (cdr lista)) lista)
         (else (append (invertir (cdr lista)) (lista (car lista)))))) 
 
 ;*********************************************************************************************************************************
-
-;;(define matriz-prueba '((1 2 3) (4 5 6) (7 8 9)))
