@@ -1,6 +1,5 @@
 #lang racket
 
-; holaaa
 ; crea-matriz: permite crear una matriz n x m
 ; entrada: n,m -> n tamaño de la fila, m tamaño de la columna 
 ; salida: matriz del tamaño seleccionado 
@@ -17,11 +16,8 @@
         (else (agregafila (cons '0 fila) (- n 1)))))
 
 ; (crear-matriz 2 3)
-
 ; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
-
 ; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha
-
 ; objetivo calcula el valor de cada componente
 ;*********************************************************************************************************************************
 
@@ -42,54 +38,85 @@
         ((zero? (car fila)) (busca-en-fila (cdr fila) i (+ j 1) (append acum (list (list i j)))))
         (else (busca-en-fila (cdr fila) i (+ j 1) acum))))
 ;*********************************************************************************************************************************
-
-; objetivo: se calcula el valor de cada columna disponible
-;
-;
-(define (objetivo columnas matriz)
+; funcion-objetivo: se calcula el valor de cada columna disponible
+; entrada: colomnas que corresponde al número de columnas que hay en la matriz, y una matriz 
+; salida: devuelve el número de columna y el valor heurístico
+(define (funcion-objetivo columnas matriz)
   (cond ((null? columnas) '())
         ((Pair? columnas)
          (cons (list (car columnas)
-                     (heuristica (numeroFila (elemento (car columnas) matriz))
+                     (funcion-heuristicastica (valor-fila (elemento-matriz (car columnas) matriz))
                                  (car columnas) matriz))
-               (objetivo (cdr columnas) matriz)))))
+               (funcion-objetivo (cdr columnas) matriz)))))
 
-; Pair?: 
-(define (Pair? x)
-  (cond ((null? x) #f)
-        ((not (list? x)) #f)
+; Pair?: verifica si la entrada es una matriz (una lista de listas)
+; entrada: x -> es una matiz
+; salida: True en caso de que sea una matriz, sino false 
+(define (Pair? mat)
+  (cond ((null? mat) #f)
+        ((not (list? mat)) #f)
         (else #t)))
 
-;pertenece a objetivo
-(define (elemento index lista)
+; elemento-matriz: busca un elemento dentro de la matriz 
+; entrada: un índice y una lista
+; salida:devuelve el elemento en el índice dado de la matriz
+(define (elemento-matriz index lista)
   (cond ((or (null? lista) (<= index 0))
          #f)
         (else
-         (elemento (- index 1) (cdr lista)) (cdr lista)
+         (elemento-matriz (- index 1) (cdr lista)) (cdr lista)
          (car lista))))
 
-(define (numeroFila columna)
-  (define (numeroFila-aux columna indice)
+; valor-fila: verifica que índices son diferentes de 0
+; entrada: una columna y u índice 
+; salida: devuelve el índice del primer elemento en la lista que no es igual a 0 o sino false 
+(define (valor-fila columna)
+  (define (valor-fila-aux columna indice)
     (cond ((null? columna) #f)
-          ((or (eq? (car columna) 0) (eq? (car columna) #f)) indice)
-          (else (numeroFila-aux (cdr columna) (+ indice 1)))))
-  (numeroFila-aux columna 0))
+          ((or (equal? (car columna) 0) (equal? (car columna) #f)) indice)
+          (else (valor-fila-aux (cdr columna) (+ indice 1)))))
+  (valor-fila-aux columna 0))
 
 
-; heuristica
-(define (heuristica fila columna matriz)
+; funcion-heuristicastica: asignación de valores a las columnas 
+;entrada: numero de fila y columna, y la matriz 
+;salida: valor de cada columna
+(define (funcion-heuristicastica fila columna matriz)
   (+
-   (combo (verifHorizontal (agregar 2 columna matriz) fila columna))
-   (combo (verifVertical (agregar 2 columna matriz) fila columna))
-   (combo (verifDiagonal_suma (agregar 2 columna matriz) fila columna))
-   (combo_vertical (verifHorizontal (agregar 1 columna matriz) fila columna))
-   (combo_vertical (verifVertical (agregar 1 columna matriz) fila columna))
-   (combo (verifDiagonal_suma (agregar 1 columna matriz) fila columna))))
+   (distancia (heu-horizontal  (agregar-ficha 2 columna matriz) fila columna))
+   (distancia (heu-vertical  (agregar-ficha 2 columna matriz) fila columna))
+   (distancia (total-diagonal  (agregar-ficha 2 columna matriz) fila columna))
+   (distancia-vertical (heu-horizontal  (agregar-ficha 1 columna matriz) fila columna))
+   (distancia-vertical (heu-vertical  (agregar-ficha 1 columna matriz) fila columna))
+   (distancia (total-diagonal  (agregar-ficha 1 columna matriz) fila columna))))
 
 
 
-; verificaDiagonal
-(define (verifDiagonal_suma matriz fila columna)
+;heu-horizontal: función que verifica si hay un cuatro en línea de manera horizontal
+;entrada: matriz, una fila y una columna 
+;salida: la cantidad de fichas dentro de la fila 
+(define (heu-horizontal  matriz fila columna)
+  (cond ((null? matriz) 0)
+        ((and (equal? (car (car matriz)) fila) (equal? (cdr (car matriz)) columna))
+         (+ 1 (heu-horizontal  (cdr matriz) fila columna)))
+        (else (heu-horizontal  (cdr matriz) fila columna))))
+
+;heu-vertical: función que verifica si hay un cuatro en línea de manera vertical 
+;entrada: matriz, una fila y una columna 
+;salida: la cantidad de fichas dentro de la columna  
+(define (heu-vertical  matriz fila columna)
+  (cond ((null? matriz) 0)
+        ((= fila 0)
+         (+ 1 (heu-vertical  (cdr matriz) (- fila 1) columna)))
+        ((= (valor-fila (car matriz)) columna)
+         (+ 1 (heu-vertical  (cdr matriz) (- fila 1) columna)))
+        (else (heu-vertical  (cdr matriz) (- fila 1) columna))))
+
+
+;total-diagonal: función que verifica si hay un cuatro en línea de manera diagonal 
+;entrada: matriz, una fila y una columna 
+;salida: la cantidad de fichas de forma diagonal  
+(define (total-diagonal  matriz fila columna)
   (cond ((or (= fila 1) (= columna 1))
          (calcularDiagonal 1 1 matriz))
         ((or (= fila (length matriz)) (= columna (length (car matriz))))
@@ -104,40 +131,26 @@
         (else (calcularDiagonal (+ fila 1) 1 (cdr matriz)))))
 
 
-;verificaVertical
-(define (verifVertical matriz fila columna)
-  (cond ((null? matriz) 0)
-        ((= fila 0)
-         (+ 1 (verifVertical (cdr matriz) (- fila 1) columna)))
-        ((= (numeroFila (car matriz)) columna)
-         (+ 1 (verifVertical (cdr matriz) (- fila 1) columna)))
-        (else (verifVertical (cdr matriz) (- fila 1) columna))))
-
-
-;verificaHorizontal 
-(define (verifHorizontal matriz fila columna)
-  (cond ((null? matriz) 0)
-        ((and (equal? (car (car matriz)) fila) (equal? (cdr (car matriz)) columna))
-         (+ 1 (verifHorizontal (cdr matriz) fila columna)))
-        (else (verifHorizontal (cdr matriz) fila columna))))
-
-
-; agregar es parte de la función heuristica
-
-
-(define (combo num)
+; distancia:  función se utiliza para calcular la distancia
+; entrada: un número (num)
+; salida: distancia entre el número digitado y el número con valor dos de la condición 
+(define (distancia num)
   (cond ((<= num 2) num)
-        (else (+ 1 (combo (- num 1))))))
+        (else (+ 1 (distancia (- num 1))))))
 
-(define (combo_vertical num)
+; distancia-vertical:  función se utiliza para calcular la distancia
+; entrada: un número (num)
+; salida: distancia entre el número digitado y el número con valor uno de la condición 
+(define (distancia-vertical num)
   (cond ((> num 1) (+ num 2))
         ((= num 1) 1)
         (else 0)))
 
-(define (agregar elemento columna matriz)
+;agregar-ficha: 
+(define (agregar-ficha elemento columna matriz)
   (cond ((null? matriz) '())
         ((zero? columna) (cons (cons elemento (car matriz)) (cdr matriz)))
-        (else (cons (car matriz) (agregar elemento (- columna 1) (cdr matriz))))))
+        (else (cons (car matriz) (agregar-ficha elemento (- columna 1) (cdr matriz))))))
 
 
 ;*********************************************************************************************************************************
@@ -156,49 +169,5 @@
 (define (cantidad-columnas mat)
   (cond ((null? mat)0)
         (else (length (car mat)))))
-
-;*********************************************************************************************************************************
-;obtener-ele:
-;entrada: una lista y un índice 
-;salida: retorna el elemento que se encuentra en el índice indicado 
-(define (obtener-ele lista idx)
-  (cond ((null? lista) '())
-    ; Si el índice es 0, devolver el primer elemento de la lista
-    ((= idx 1) (car lista))
-    ; Si el índice es mayor que 0, llamar recursivamente a la función con el resto de la lista y el índice reducido en 1
-    (else (obtener-ele (cdr lista) (- idx 1)))))
-
-;*********************************************************************************************************************************
-;obtnernum:función que se encarga de obtener el número de una matriz en determinada posición 
-;entrada: una matriz y las posiciones (i, j)
-;salida: el elemento correspondiente en la posición (i, j) de la matriz.
-(define (obtenernum mat i j)
-  (cond ((null? mat) '())
-        ((= i 0) (obtener-ele (car mat) j))
-        (else (obtenernum (cdr mat) (- i 1) j))))
-
-;*********************************************************************************************************************************
-; vacio: verifica si en la matriz hay algun elemento vacio en la matriz
-; entrada: mat,i,j -> una matriz n x m, indice de fila, indice de columna
-; salida: retorna #t en caso de encontrar vacio, sino #f en situación contraria
-(define (vacio? mat i j)
-  (equal? (obtenernum mat i j) '()))
-
-;*********************************************************************************************************************************
-; largo: función recursiva para obtener el largo de una lista
-; entrada: una lista
-; salida: retorna el largo que posee la lista 
-(define (largo lista)
-  (cond ((null? lista) 0) ; si la lista es vacía, devuelve 0
-        (else (+ 1 (largo (cdr lista)))))) ; en otro caso, suma 1 y llama recursivamente a la función con la cola de la lista
-
-;*********************************************************************************************************************************
-; invertir: función que invierte el orden de una lista
-; entrada: una lista 
-; salida: una lista con sus datos invertidos 
-(define (invertir lista)
-  (cond ((null? lista) '())
-        ((null? (cdr lista)) lista)
-        (else (append (invertir (cdr lista)) (lista (car lista)))))) 
 
 ;*********************************************************************************************************************************
