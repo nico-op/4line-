@@ -99,11 +99,15 @@
           (set! alto ( + 80 alto)))   ;por cada fila y columna va a añadir 80 pixeles hacia el alto y ancho de la ventana
 (display matriz)
 (newline)
+
+
 ; Coloca las fichas en el tablero
 (define (SetToken color posX posY dc)
   (send dc set-brush color 'solid) ;se rellena el circulo
   (send dc set-pen color 4 'solid)
-  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50)) ;se dibuja el circulo
+  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50) ;se dibuja el circulo amarillo
+  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50)) ;se dibuja el circulo rojo
+
 
 ; Con esta funcion se puede conocer la posicion del mouse, obteniendo las coordenadas en "y" y "x" de la ventana
 (define (mouse-pos event)
@@ -132,9 +136,26 @@
            (for ([i (in-range 0 (string->number fila))])
            (send dc draw-line 0 (* i 80) ancho (* i 80)))
 
-           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
+           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc) (SetToken "red" 5 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
          
 
+;Funcion que abre un mensaje informando la situacion (ganador o perdedor)
+         
+         (define (Winner Status)
+  (send frame_juego delete-child Canva)
+  (cond [(equal? Status 1)
+         (new message% [parent frame_juego]
+                       [label "Ha ganado la partida :)"])]
+        [(equal? Status 0)
+         (new message% [parent frame_juego]
+                       [label "Ha perdido la partdida :("])]
+        [(equal? Status 2)
+          (new message% [parent frame_juego]
+                       [label "Hay un empate"])]
+        ))    
+
+         
+         
 ;En este canvas se va a ir refrescando la pantalla de juego con los nuevos cambios o eventos, y se hace un enlace de las coordenadas "x" y "y" reales del mouse
 ;cuando el usuario vaya haciendo click en el canva
 
