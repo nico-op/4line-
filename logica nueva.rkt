@@ -126,7 +126,7 @@
 
 
 (define (combo num)
-  (cond ((<= num 1) num)
+  (cond ((<= num 2) num)
         (else (+ 1 (combo (- num 1))))))
 
 (define (combo_vertical num)
