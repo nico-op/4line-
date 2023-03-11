@@ -41,6 +41,103 @@
   (cond ((null? fila) acum)
         ((zero? (car fila)) (busca-en-fila (cdr fila) i (+ j 1) (append acum (list (list i j)))))
         (else (busca-en-fila (cdr fila) i (+ j 1) acum))))
+;*********************************************************************************************************************************
+
+; objetivo: se calcula el valor de cada columna disponible
+;
+;
+(define (objetivo columnas matriz)
+  (cond ((null? columnas) '())
+        ((Pair? columnas)
+         (cons (list (car columnas)
+                     (heuristica (numeroFila (elemento (car columnas) matriz))
+                                 (car columnas) matriz))
+               (objetivo (cdr columnas) matriz)))))
+
+
+(define (Pair? x)
+  (cond ((null? x) #f)
+        ((not (list? x)) #f)
+        (else #t)))
+
+;pertenece a objetivo
+(define (elemento index lista)
+  (cond ((or (null? lista) (<= index 0))
+         #f)
+        (else
+         (elemento (- index 1) (cdr lista)) (cdr lista)
+         (car lista))))
+
+(define (numeroFila columna)
+  (define (numeroFila-aux columna indice)
+    (cond ((null? columna) #f)
+          ((or (eq? (car columna) 0) (eq? (car columna) #f)) indice)
+          (else (numeroFila-aux (cdr columna) (+ indice 1)))))
+  (numeroFila-aux columna 0))
+
+
+; heuristica
+(define (heuristica fila columna matriz)
+  (+
+   (combo (verifHorizontal (agregar 2 columna matriz) fila columna))
+   (combo (verifVertical (agregar 2 columna matriz) fila columna))
+   (combo (verifDiagonal_suma (agregar 2 columna matriz) fila columna))
+   (combo_vertical (verifHorizontal (agregar 1 columna matriz) fila columna))
+   (combo_vertical (verifVertical (agregar 1 columna matriz) fila columna))
+   (combo (verifDiagonal_suma (agregar 1 columna matriz) fila columna))))
+
+
+
+; verificaDiagonal
+(define (verifDiagonal_suma matriz fila columna)
+  (cond ((or (= fila 1) (= columna 1))
+         (calcularDiagonal 1 1 matriz))
+        ((or (= fila (length matriz)) (= columna (length (car matriz))))
+         (calcularDiagonal fila columna matriz))
+        (else 0)))
+
+(define (calcularDiagonal fila columna matriz)
+  (cond ((null? matriz) 0)
+        ((= fila 1)
+         (cond ((= columna 1) (+ (car (car matriz)) (calcularDiagonal (+ fila 1) (+ columna 1) (cdr matriz))))
+               (else (calcularDiagonal fila (+ columna 1) (cdr matriz)))))
+        (else (calcularDiagonal (+ fila 1) 1 (cdr matriz)))))
+
+
+;verificaVertical
+(define (verifVertical matriz fila columna)
+  (cond ((null? matriz) 0)
+        ((= fila 0)
+         (+ 1 (verifVertical (cdr matriz) (- fila 1) columna)))
+        ((= (numeroFila (car matriz)) columna)
+         (+ 1 (verifVertical (cdr matriz) (- fila 1) columna)))
+        (else (verifVertical (cdr matriz) (- fila 1) columna))))
+
+
+;verificaHorizontal 
+(define (verifHorizontal matriz fila columna)
+  (cond ((null? matriz) 0)
+        ((and (equal? (car (car matriz)) fila) (equal? (cdr (car matriz)) columna))
+         (+ 1 (verifHorizontal (cdr matriz) fila columna)))
+        (else (verifHorizontal (cdr matriz) fila columna))))
+
+
+; agregar es parte de la función heuristica
+
+
+(define (combo num)
+  (cond ((<= num 1) num)
+        (else (+ 1 (combo (- num 1))))))
+
+(define (combo_vertical num)
+  (cond ((> num 1) (+ num 2))
+        ((= num 1) 1)
+        (else 0)))
+
+(define (agregar elemento columna matriz)
+  (cond ((null? matriz) '())
+        ((zero? columna) (cons (cons elemento (car matriz)) (cdr matriz)))
+        (else (cons (car matriz) (agregar elemento (- columna 1) (cdr matriz))))))
 
 
 ;*********************************************************************************************************************************
