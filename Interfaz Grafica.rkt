@@ -110,7 +110,7 @@
 
 
 ; Con esta funcion se puede conocer la posicion del mouse, obteniendo las coordenadas en "y" y "x" de la ventana
-(define (mouse-pos event)
+(define (posicion-mouse event)
            (define-values (x) (send event get-x))
            (define-values (y) (send event get-y))
            (values x y))
@@ -164,7 +164,7 @@
                               (define/override (on-event event)
                                 (match (send event get-event-type)
                                   ['left-down
-                                   (let-values (((x y) (mouse-pos event)))
+                                   (let-values (((x y) (posicion-mouse event)))
                                      (GetColumna x) (displayln Columna) (set! Seleccion #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
