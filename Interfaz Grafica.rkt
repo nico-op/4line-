@@ -45,7 +45,7 @@
 (define panel1( new horizontal-panel%[parent frame_p] [alignment '(center center)]))
 
 
-;Crea los campos de texto        ;row fila ,column columna
+;Crea los campos de texto  ;row fila ,column columna
 (define tf_columnas(new text-field% [label "Numero de columnas"] [parent panel1] [min-width 10] [min-height 10] [vert-margin 10] [horiz-margin 10]))
 (define tf_filas (new text-field% [label "Numero de filas"] [parent panel1] [min-width 10] [min-height 10] [vert-margin 10] [horiz-margin 10]))
 
@@ -68,7 +68,7 @@
     [(> (string->number columnas) 16) (new message% [parent panel3] [label "Error! El numero maximo de columnas es de 16"])]
     [(< (string->number filas) 8) (new message% [parent panel3] [label "Error! El numero minimo de filas es de 8"])]
     [(< (string->number columnas) 8) (new message% [parent panel3] [label "Error! El numero minimo de columnas es de 8"])]
-    [else (Juego #t(send tf_columnas get-value)(send tf_filas get-value))(send frame_p show #f)])))   ;cierra la ventana principal y abre la de juego
+    [else (Juego #t(send tf_columnas get-value)(send tf_filas get-value))(send frame_p show #f)])))   ;cierra la ventana principal y abre la de juego, obtiene los valores ingresados a los textfields
 
 
 
@@ -102,7 +102,7 @@
 
 
 ; Coloca las fichas en el tablero
-(define (SetToken color posX posY dc)
+(define (Colocar-ficha color posX posY dc)
   (send dc set-brush color 'solid) ;se rellena el circulo
   (send dc set-pen color 4 'solid)
   (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50) ;se dibuja el circulo amarillo
@@ -116,7 +116,7 @@
            (values x y))
 
 (define Columna 0)
-(define Selected #f)
+(define Seleccion #f)
 
 (define (GetColumna x)
   (set! Columna (quotient x 80)))
@@ -136,7 +136,7 @@
            (for ([i (in-range 0 (string->number fila))])
            (send dc draw-line 0 (* i 80) ancho (* i 80)))
 
-           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc) (SetToken "red" 5 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
+           (cond ((equal? Seleccion #t) (Colocar-ficha "yellow" 7 1 dc) (Colocar-ficha "red" 5 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
          
 
 ;Funcion que abre un mensaje informando la situacion (ganador o perdedor)
@@ -165,7 +165,7 @@
                                 (match (send event get-event-type)
                                   ['left-down
                                    (let-values (((x y) (mouse-pos event)))
-                                     (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
+                                     (GetColumna x) (displayln Columna) (set! Seleccion #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
          ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
