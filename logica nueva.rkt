@@ -152,6 +152,17 @@
         ((zero? columna) (cons (cons elemento (car matriz)) (cdr matriz)))
         (else (cons (car matriz) (agregar-ficha elemento (- columna 1) (cdr matriz))))))
 
+;*********************************************************************************************************************************
+; seleccion: permite elegir cual de las heuristicas calculadas en cada columna es mejor
+; entrada: columnas_heuristica -> una lista de tuplas compuestas por el numero de columna y su puntaje
+; salida: retorna el indice de la columna donde tiene el maximo valor de la heuristica
+(define (seleccion columnas_heuristica)
+  (define (seleccion-aux columnas_heuristica max-heuristica max-indice)
+    (cond ((null? columnas_heuristica) max-indice)
+          ((>= (cadar columnas_heuristica) max-heuristica)
+           (seleccion-aux (cdr columnas_heuristica) (cadar columnas_heuristica) (caar columnas_heuristica)))
+          (else (seleccion-aux (cdr columnas_heuristica) max-heuristica max-indice))))
+  (seleccion-aux columnas_heuristica 0 #f))
 
 ;*********************************************************************************************************************************
 ; solución el valor del puntaje total 
