@@ -20,6 +20,8 @@
   (cond ((equal? n 0) fila)
         (else (agregafila (cons '0 fila) (- n 1)))))
 
+
+
 ; (crear-matriz 2 3)
 ; es viable permite conocer si el componente es viable, es decir que no haya sido elegido anteriormente
 ; selección obtiene entre los puntajes, el más alto será donde se vaya a colocar la ficha

@@ -1,7 +1,8 @@
 #lang racket/gui    ;Se utilizará la interfaz grafica de Racket
 ;(require lang/posn) ;se utiliza para importar el módulo posn que proporciona funciones para trabajar con coordenadas de posición en dos dimensiones.
 (require 2htdp/image) ;libreria que permite cargar imagenes
-(require "logica nueva.rkt")
+(require "logica.rkt")
+
 ;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
 ;(open-graphics) ;aqui se llama a la libreria
 ;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
@@ -87,7 +88,7 @@
 ;Funcionalidad del juego
 (define(Juego Estado columna fila)
   (cond((equal? Estado #t)
-        
+        (define matriz (crear-matriz (string->number fila) (string->number columna)))
         (define alto 0)  ;va a definir el alto del tablero
         (define ancho 0)  ;va a definir el ancho del tablero
 
@@ -96,7 +97,8 @@
 
         (for([j (in-range (string->number fila))])  ;segun la cantidad de filas ese sera el alto del tablero
           (set! alto ( + 80 alto)))   ;por cada fila y columna va a añadir 80 pixeles hacia el alto y ancho de la ventana
- 
+(display matriz)
+(newline)
 ; Coloca las fichas en el tablero
 (define (SetToken color posX posY dc)
   (send dc set-brush color 'solid) ;se rellena el circulo
