@@ -146,7 +146,8 @@
         ((= num 1) 1)
         (else 0)))
 
-;agregar-ficha: 
+; agregar-ficha: agrega un elemento especificado a la columna de la matriz
+; entradas: elemento, columna, matriz
 (define (agregar-ficha elemento columna matriz)
   (cond ((null? matriz) '())
         ((zero? columna) (cons (cons elemento (car matriz)) (cdr matriz)))
@@ -165,7 +166,6 @@
   (seleccion-aux columnas_heuristica 0 #f))
 
 ;*********************************************************************************************************************************
-; solución el valor del puntaje total 
 ; cantidad-filas:
 ; entrada: mat -> una matriz de n x m
 ; salida: 
