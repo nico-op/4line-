@@ -1,7 +1,7 @@
 #lang racket/gui    ;Se utilizará la interfaz grafica de Racket
 ;(require lang/posn) ;se utiliza para importar el módulo posn que proporciona funciones para trabajar con coordenadas de posición en dos dimensiones.
 (require 2htdp/image) ;libreria que permite cargar imagenes
-(require "logica nueva.rkt")
+
 ;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
 ;(open-graphics) ;aqui se llama a la libreria
 ;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
@@ -10,8 +10,6 @@
 ;(define panel (new horizontal-panel% [parent frame]))
 ;(define canvas (new canvas% [parent panel]))
 
-;; Por definir, tomar las variables que son columnas y filas del tablero
-;;
 ;---------------------------------------------------------------
                     ;VENTANA PRINCIPAL
 ;---------------------------------------------------------------
@@ -99,9 +97,9 @@
  
 ; Coloca las fichas en el tablero
 (define (SetToken color posX posY dc)
-  (send dc set-brush color 'solid) ;se rellena el circulo
+  (send dc set-brush color 'solid)
   (send dc set-pen color 4 'solid)
-  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50)) ;se dibuja el circulo
+  (send dc draw-ellipse (* 80 posY) (* 80 posX) 50 50))
 
 ; Con esta funcion se puede conocer la posicion del mouse, obteniendo las coordenadas en "y" y "x" de la ventana
 (define (mouse-pos event)
@@ -126,16 +124,14 @@
            
            (for ([j (in-range 0 (string->number columna))])
              (send dc draw-line (* j 80) 0 (* j 80) alto))
+          
+           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc)))    ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
            
            (for ([i (in-range 0 (string->number fila))])
-           (send dc draw-line 0 (* i 80) ancho (* i 80)))
+             (send dc draw-line 0 (* i 80) ancho (* i 80))))
 
-           (cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
-         
-
-;En este canvas se va a ir refrescando la pantalla de juego con los nuevos cambios o eventos, y se hace un enlace de las coordenadas "x" y "y" reales del mouse
-;cuando el usuario vaya haciendo click en el canva
-
+; Define a new class of canvas to control what is going to be drawn in the screen. Contains some code to declare the x and y coordinates and set them
+         ; to the actual position of the mouse when the left button is clicked.
          (define my-canvas% (class canvas%
                               (super-new)
                               (define/override (on-event event)
@@ -145,26 +141,15 @@
                                      (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
-         ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
+         ; Instantiate a new canvas to draw all stuff on the window
          (define Canva (new my-canvas% [parent frame_juego] [paint-callback draw-canvas] [min-width ancho] [min-height alto]))
 
          ;Funcion que hace el evento de abrir la ventana de juego
          (send frame_juego show #t))
 
 
-       
+        
+
+
+
 ))
-
-
-;(require (lib "graphics.ss" "graphics")) ;libreria de graficos simples
-;(open-graphics) ;aqui se llama a la libreria
-;(define v_principal (open-viewport "Ventana Principal" 700 600))   ;;se crea la ventana principal, y se pasan los parametros (ancho,alto)
-;(define oculta (open-pixmap "Ventana Principal" 700 600))  ; crea una ventana oculta
-;;(define imagen-fondo (bitmap/file "C:/Users/cecil/OneDrive/Documentos/4line-/2.png"))
-;(define panel (new horizontal-panel% [parent frame]))
-;(define canvas (new canvas% [parent panel]))
-
-
-
-
-

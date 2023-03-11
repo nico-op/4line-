@@ -1,5 +1,8 @@
 #lang racket/gui
 
+
+#|Logica implementada en paradigma funcional|#
+
  
 (define (suma-valores valores)
   (cond ((null? valores) 0)
@@ -48,5 +51,17 @@
 
 
 
+;; selección: permite seleccionar cual tiene la mejor opción posible
 
-;;Plan para mañana 4/3/23, si un espacio es viable entonces colocar la ficha.
+
+(define (seleccion matriz)
+  (let* ((columns (recorreColumnas matriz))
+         (viable-columns (esviablecolumns matriz)))
+    (let loop ((cols columns) (viables viable-columns) (max-viability -1) (best-col #f))
+      (cond ((null? cols) best-col)
+            ((and (car viables) (> (car cols) max-viability))
+             (loop (cdr cols) (cdr viables) (car cols) (car cols)))
+            (else (loop (cdr cols) (cdr viables) max-viability best-col))))))
+
+
+

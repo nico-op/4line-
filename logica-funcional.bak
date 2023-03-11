@@ -4,6 +4,7 @@
   (cond ((null? values) 0)
         (else (+ (car values) (sum-values (cdr values))))))
 
+<<<<<<< Updated upstream
 
 ;; viabilidad: determina la viabilidad.
 ;; entrada: candidate -> recibe una lista de conjuntos candidatos.
@@ -13,3 +14,10 @@
         (else #f)))
 ;; como usar:
 ;; (viabilidad '(-1 0 1 3 4 5))
+=======
+(define (is-viable candidate)
+  (cond ((> (sum-values candidate) 0) #t)
+        (else #f)))
+
+
+>>>>>>> Stashed changes
