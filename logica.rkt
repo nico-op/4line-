@@ -67,11 +67,21 @@
 ; verificaMatriz: verifica en que posición de la matriz se va a colocar el elemento en la interfaz grafiaca
 ; entrada: i, j -> toma la i como una fila, toma j como una columna
 ; salida: retorna falso en caso de que la matriz sea falsa.
-(define (verificaMatriz matriz i j)
-  (cond ((or (null? matriz) (null? (elemento-matriz i matriz))) #f)
-        (else (elemento-matriz j (elemento-matriz i matriz)))))
+(define (verificaMatriz matriz fila columna )
+  (cond((null? matriz)
+        matriz)
+       (else
+        (elemento-matriz fila (elemento-matriz columna matriz)))))
 
-
+; eval-matriz: busca un elemento dentro de la matriz 
+; entrada: un índice y una lista
+; salida:devuelve el elemento en el índice dado de la matriz
+(define (eval-matriz index lista)
+  (cond ((or (null? lista) (<= index 0))
+         #f)
+        (else
+         (eval-matriz (- index 1) (cdr lista))
+         (car lista))))
 ; elemento-matriz: busca un elemento dentro de la matriz 
 ; entrada: un índice y una lista
 ; salida:devuelve el elemento en el índice dado de la matriz
