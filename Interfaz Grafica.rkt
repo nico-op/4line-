@@ -125,12 +125,15 @@
            (values x y))
 
 (define Columna 0)
+(define Fila 0)
 (define Selected #f)
 
 
 (define (GetColumna x)
   (set! Columna (quotient x 80)))
 
+(define (GetFila y)
+  (set! Fila (quotient y 80)))
 
 ;Crea el frame del juego instanciado la clase frame%
 (define frame_juego (new frame% [label "4 Line"]
@@ -149,12 +152,12 @@
            
            (for* ([i (in-range 1 (string->number fila))]
                   [j (in-range 1 (string->number columna))])
-             (let ([val (verificaMatriz matriz i j)])
-               (cond [(= val 1) (SetToken "yellow" i (- j 1) dc)]
-                     [(= val 2) (SetToken "green" i (- j 1) dc)]))))
+             
+               (cond  ((equal? Selected #t) (SetToken "yellow" Fila Columna  dc)(SetToken "green" Fila  Columna  dc))))) ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
+         
 
 
-           ;(cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
+           ;(cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc)))) 
            ;(define (SetToken color posX posY dc)
 
 ;En este canvas se va a ir refrescando la pantalla de juego con los nuevos cambios o eventos, y se hace un enlace de las coordenadas "x" y "y" reales del mouse
@@ -166,7 +169,7 @@
                                 (match (send event get-event-type)
                                   ['left-down
                                    (let-values (((x y) (mouse-pos event)))
-                                     (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
+                                     (GetColumna x)(GetFila y)  (displayln Columna) (displayln Fila)  (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
          ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
