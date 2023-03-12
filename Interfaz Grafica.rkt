@@ -94,15 +94,12 @@
 
                
         (define (cuadroElegir columna)
-          (cond ((equal? (solucion (+ columna 1) 1 matriz) #t)
-                 (message-box "Ganado") )
+          (cond ((equal? (solucion (+ columna 1) 1 matriz) #t) (message-box "Ganado") )
                 (else (cuadroElegir-aux (solucion (+ columna 1) 1 matriz))))
           (send frame_juego refresh))
         (define (cuadroElegir-aux matModificada)
-          (cond ((equal? (solucion (conexion columna) 2 matriz) #t)
-                 (message-box "Perdió"))
-                (else (set! matriz (solucion (conexion columna) 2 matModificada))))
-          (send frame_juego refresh))
+          (cond ((equal? (solucion (conexion columna) 2 matriz) #t) (message-box "Perdió"))
+                (else (set! matriz (solucion (conexion columna) 2 matModificada)))))
  
                 
 
@@ -131,8 +128,12 @@
 (define Fila 0)
 (define Selected #f)
 
+
 (define (GetColumna x)
   (set! Columna (quotient x 80)))
+
+(define (GetFila y)
+  (set! Fila (quotient y 80)))
 
 ;Crea el frame del juego instanciado la clase frame%
 (define frame_juego (new frame% [label "4 Line"]
@@ -141,27 +142,19 @@
 
 ; Segmentar el tablero con lineas
          (define (draw-canvas canvas dc)
-  (send dc set-pen "blue" 4 'solid)
+           (send dc set-pen "blue" 4 'solid)
            
-  (for ([j (in-range 0 (string->number columna))])
-    (send dc draw-line (* j 80) 0 (* j 80) alto))
+           (for ([j (in-range 0 (string->number columna))])
+             (send dc draw-line (* j 80) 0 (* j 80) alto))
            
-  (for ([i (in-range 0 (string->number fila))])
-    (send dc draw-line 0 (* i 80) ancho (* i 80)))
+           (for ([i (in-range 0 (string->number fila))])
+           (send dc draw-line 0 (* i 80) ancho (* i 80)))
            
-<<<<<<< HEAD
            (for* ([i (in-range 1 (string->number fila))]
                   [j (in-range 1 (string->number columna))])
              
                (cond  ((equal? Selected #t) (SetToken "yellow" Fila Columna  dc)(SetToken "green" Fila  Columna  dc))))) ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
          
-=======
-  (for ([i (in-range 1 (string->number fila))]
-        [j (in-range 1 (string->number columna))])
-    (let ([val (verificaMatriz matriz i j)])
-      (cond [(= val 1) (SetToken "yellow" i (- j 1) dc)]
-            [(= val 2) (SetToken "green" i (- j 1) dc)]))))
->>>>>>> main
 
 
            ;(cond ((equal? Selected #t) (SetToken "yellow" 7 1 dc)))) 
@@ -176,11 +169,7 @@
                                 (match (send event get-event-type)
                                   ['left-down
                                    (let-values (((x y) (mouse-pos event)))
-<<<<<<< HEAD
                                      (GetColumna x)(GetFila y)  (displayln Columna) (displayln Fila)  (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
-=======
-                                     (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
->>>>>>> main
                                   [else (void)]))))
 
          ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
