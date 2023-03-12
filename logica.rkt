@@ -1,5 +1,5 @@
 #lang racket
-(provide crear-matriz conexion);luego brindar "soluccion y turno"
+(provide crear-matriz conexion solucion verificaMatriz);pasa las funciones principales 
 ;;funcion principal
 (define (conexion mat)
   (seleccion(funcion-objetivo(viabilidad mat))))
@@ -63,6 +63,14 @@
   (cond ((null? mat) #f)
         ((not (list? mat)) #f)
         (else #t)))
+
+; verificaMatriz: verifica en que posición de la matriz se va a colocar el elemento en la interfaz grafiaca
+; entrada: i, j -> toma la i como una fila, toma j como una columna
+; salida: retorna falso en caso de que la matriz sea falsa.
+(define (verificaMatriz matriz i j)
+  (cond ((or (null? matriz) (null? (elemento-matriz i matriz))) #f)
+        (else (elemento-matriz j (elemento-matriz i matriz)))))
+
 
 ; elemento-matriz: busca un elemento dentro de la matriz 
 ; entrada: un índice y una lista
@@ -171,9 +179,9 @@
           (else (seleccion-aux (cdr columnas_heuristica) max-heuristica max-indice))))
   (seleccion-aux columnas_heuristica 0 #f))
 ;*********************************************************************************************************************************
-; solución:
-; 
-;
+; solución: permite conocer quien de los jugadores en este maquina o jugador cliente ha ganado
+; entrada: columna, jugador, mat -> toma el indice de una columna, toma una ficha jugador que se define en 1 o 2, 1 es para jugador, 2 computadora.
+; salida: retorna true si hay 4 en linea.
 
 (define (solucion columna jugador mat)
   (cond ((null? mat) mat)
