@@ -175,21 +175,15 @@
 ; 
 ;
 
-(define (turno columna jugador matriz)
-  (cond ((null? matriz) '())
-        ((null? (car matriz)) '())
-        ((zero? (elemento-matriz columna (car matriz)))
-         (agregar-jugada columna jugador matriz))
-        (else
-         (turno columna jugador (cdr matriz)))))
-
-(define (agregar-jugada columna jugador matriz)
-  (cons (agregar-jugada-fila columna jugador (car matriz)) (cdr matriz)))
-
-(define (agregar-jugada-fila columna jugador fila)
-  (cond ((null? fila) '())
-        ((= columna 1) (cons jugador (cdr fila)))
-        (else (cons (car fila) (agregar-jugada-fila (- columna 1) jugador (cdr fila))))))
+(define (solucion columna jugador mat)
+  (cond ((null? mat) mat)
+        ((>= (+ (heu-horizontal (agregar-ficha jugador columna mat)
+                                (valor-fila (elemento-matriz columna (agregar-ficha jugador columna mat))) columna)1) 4)#t)
+        ((>= (+ (heu-vertical (agregar-ficha jugador columna mat)
+                              (valor-fila (elemento-matriz columna (agregar-ficha jugador columna mat))) columna) 1) 4)#t)
+        ((>= (+ (total-diagonal (agregar-ficha jugador columna mat)
+                              (valor-fila (elemento-matriz columna (agregar-ficha jugador columna mat))) columna) 1) 4)#t)
+        (else (agregar-ficha jugador columna mat))))
 
 
 
