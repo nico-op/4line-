@@ -116,10 +116,15 @@
            (values x y))
 
 (define Columna 0)
+(define Fila 0)
 (define Seleccion #f)
+
 
 (define (GetColumna x)
   (set! Columna (quotient x 80)))
+
+(define (GetFila y)
+  (set! Fila (quotient y 80)))
 
 ;Crea el frame del juego instanciado la clase frame%
 (define frame_juego (new frame% [label "4 Line"]
@@ -136,7 +141,7 @@
            (for ([i (in-range 0 (string->number fila))])
            (send dc draw-line 0 (* i 80) ancho (* i 80)))
 
-           (cond ((equal? Seleccion #t) (Colocar-ficha "yellow" 7 1 dc) (Colocar-ficha "red" 5 1 dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
+           (cond ((equal? Seleccion #t) (Colocar-ficha "yellow" Fila Columna dc) (Colocar-ficha "red" Fila Columna dc))))  ;el 7,7 es donde se coloca la ficha (comienza a contar a partir de cero)
          
 
 ;Funcion que abre un mensaje informando la situacion (ganador o perdedor)
@@ -165,7 +170,7 @@
                                 (match (send event get-event-type)
                                   ['left-down
                                    (let-values (((x y) (posicion-mouse event)))
-                                     (GetColumna x) (displayln Columna) (set! Seleccion #t) (send frame_juego refresh) (send Canva flush))]
+                                     (GetColumna x) (GetFila y)(displayln Columna) (set! Seleccion #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
          ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
