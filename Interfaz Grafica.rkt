@@ -127,8 +127,12 @@
 (define Columna 0)
 (define Selected #f)
 
+
 (define (GetColumna x)
   (set! Columna (quotient x 80)))
+
+(define (GetFila y)
+  (set! Fila (quotient y 80)))
 
 ;Crea el frame del juego instanciado la clase frame%
 (define frame_juego (new frame% [label "4 Line"]
@@ -163,8 +167,8 @@
                               (define/override (on-event event)
                                 (match (send event get-event-type)
                                   ['left-down
-                                   (let-values (((x y) (mouse-pos event)))
-                                     (GetColumna x) (displayln Columna) (set! Selected #t) (send frame_juego refresh) (send Canva flush))]
+                                   (let-values (((x y) (posicion-mouse event)))
+                                     (GetColumna x) (displayln Columna) (set! Seleccion #t) (send frame_juego refresh) (send Canva flush))]
                                   [else (void)]))))
 
          ; Se crea un canvas nuevo donde se van a colocar todos los elementos graficos, lineas, solidos
